@@ -74,6 +74,13 @@ export default function HomeScreen() {
               United Kingdom
             </Text>
           </Text>
+          {/* weather image */}
+          <View className="flex-row justify-center">
+            <Image
+              source={require("../assets/partlycloudy.png")}
+              className="w-52 h-52"
+            />
+          </View>
         </View>
       </SafeAreaView>
     </View>
