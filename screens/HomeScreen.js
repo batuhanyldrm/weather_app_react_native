@@ -11,6 +11,10 @@ export default function HomeScreen() {
   const [showSearch, setShowSearch] = useState(false)
   const [location, setLocation] = useState([1,2,3])
 
+  const handleLocation = (loc) => {
+    console.log("Location: ", loc)
+  }
+
   return (
     <View style={{ flex: 1, position: 'relative' }}>
       <StatusBar style='light' />
@@ -43,13 +47,16 @@ export default function HomeScreen() {
               <View className="absolute w-full bg-gray-300 top-16 rounded-3xl" >
                 {
                   location.map((loc, index) => {
+                    let showBorder = index + 1 != location.length
+                    let borderClass = showBorder ? " border-b-2 border-b-gray-400 " : ""
                     return(
-                      <TouchableOpacity 
+                      <TouchableOpacity
+                        onPress={() => handleLocation(loc)}
                         key={index}
-                        className="flex-row items-center border-0 p-3 px-4 mb-1 border-b-2 border-b-gray-400" 
+                        className={"flex-row items-center border-0 p-3 px-4 mb-1" + borderClass}
                       >
                         <MapPinIcon size={"20"} color={"gray"} />
-                        <Text>London, United Kingdom</Text>
+                        <Text className=" text-black text-lg ml-2 ">London, United Kingdom</Text>
                       </TouchableOpacity>
                     )
                   })
@@ -57,6 +64,16 @@ export default function HomeScreen() {
               </View>
             ) : null
           }
+        </View>
+        {/* forecast section */}
+        <View className="mx-4 flex justify-around flex-1 mb-2" >
+          {/* location */}
+          <Text className="text-white text-center text-2xl font-bold">
+            London,
+            <Text className="text-lg font-semibold text-gray-300">
+              United Kingdom
+            </Text>
+          </Text>
         </View>
       </SafeAreaView>
     </View>
