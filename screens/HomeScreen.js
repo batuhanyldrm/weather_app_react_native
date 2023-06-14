@@ -4,10 +4,12 @@ import { StatusBar } from 'expo-status-bar'
 import { Image } from 'react-native'
 import { theme } from '../theme'
 import { MagnifyingGlassIcon } from "react-native-heroicons/outline" 
+import { MapIcon, MapPinIcon } from "react-native-heroicons/solid" 
 
 export default function HomeScreen() {
 
   const [showSearch, setShowSearch] = useState(false)
+  const [location, setLocation] = useState([1,2,3])
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
@@ -36,6 +38,25 @@ export default function HomeScreen() {
               <MagnifyingGlassIcon size={"25"} color={"white"} />
             </TouchableOpacity>
           </View>
+          {
+            location.length > 0 && showSearch ? (
+              <View className="absolute w-full bg-gray-300 top-16 rounded-3xl" >
+                {
+                  location.map((loc, index) => {
+                    return(
+                      <TouchableOpacity 
+                        key={index}
+                        className="flex-row items-center border-0 p-3 px-4 mb-1 border-b-2 border-b-gray-400" 
+                      >
+                        <MapPinIcon size={"20"} color={"gray"} />
+                        <Text>London, United Kingdom</Text>
+                      </TouchableOpacity>
+                    )
+                  })
+                }
+              </View>
+            ) : null
+          }
         </View>
       </SafeAreaView>
     </View>
