@@ -8,23 +8,25 @@ import { CalendarDaysIcon, MapIcon, MapPinIcon } from "react-native-heroicons/so
 import {debounce} from 'lodash'
 import { fetchLocations, fetchWeatherForecast } from '../api/weather'
 import { weatherImages } from '../constants'
+import * as Progress from 'react-native-progress'
 
 export default function HomeScreen() {
 
   const [showSearch, setShowSearch] = useState(false)
   const [locations, setLocations] = useState([])
   const [weather, setWeather] = useState({})
+  const [loading, setLoading] = useState(true)
 
   const handleLocation = (loc) => {
-    console.log("Location: ", loc)
     setLocations([])
     setShowSearch(false)
+    setLoading(true)
     fetchWeatherForecast({
       cityName: loc.name,
       days: "7"
     }).then((data) => {
       setWeather(data)
-      console.log("got forecast", data)
+      setLoading(false)
     })
   }
 
@@ -49,6 +51,7 @@ export default function HomeScreen() {
       days: "7"
     }).then((data) => {
       setWeather(data)
+      setLoading(false)
     })
   } 
 
@@ -58,7 +61,13 @@ export default function HomeScreen() {
       <Image blurRadius={70} source={require('../assets/images/bg.png')}  
         style={{ position: 'absolute', height: '100%', width: '100%' }}
       /> 
-      <SafeAreaView className="flex flex-1">
+      {
+        loading ? (
+          <View className="flex-1 flex-row justify-center items-center">
+            <Progress.CircleSnail thickness={10} size={150} color={"#0bb3b2"} />
+          </View>
+        ): (
+          <SafeAreaView className="flex flex-1">
         <View style={{height:"7%"}} className="mx-4 relative z-50" >
           <View className="flex-row justify-end items-center rounded-full"
             style={{backgroundColor: showSearch ? theme.bgWhite(0.2) : "transparent"}}
@@ -189,6 +198,8 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
       </SafeAreaView>
+        )
+      }
     </View>
   )
 }
