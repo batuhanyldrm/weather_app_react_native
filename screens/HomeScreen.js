@@ -31,7 +31,6 @@ export default function HomeScreen() {
   }
 
   const handleSearch = (value) => {
-    //fetch location
     if (value.length > 2) {
       fetchLocations({cityName: value}).then((data) => {
         setLocations(data)
