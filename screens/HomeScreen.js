@@ -9,6 +9,7 @@ import {debounce} from 'lodash'
 import { fetchLocations, fetchWeatherForecast } from '../api/weather'
 import { weatherImages } from '../constants'
 import * as Progress from 'react-native-progress'
+import { getData, storeData } from '../utils/asyncStorage'
 
 export default function HomeScreen() {
 
@@ -27,6 +28,7 @@ export default function HomeScreen() {
     }).then((data) => {
       setWeather(data)
       setLoading(false)
+      storeData("city", loc.name)
     })
   }
 
@@ -44,9 +46,12 @@ export default function HomeScreen() {
     fetchMyWeatherData()
   }, [])
   
-  const fetchMyWeatherData = () => {
+  const fetchMyWeatherData = async () => {
+    let myCity = await getData("city")
+    let cityName = "Istanbul"
+    if (myCity) cityName = myCity
     fetchWeatherForecast({
-      cityName: "Istanbul",
+      cityName,
       days: "7"
     }).then((data) => {
       setWeather(data)
@@ -153,7 +158,7 @@ export default function HomeScreen() {
               <View className="flex-row space-x-2 items-center">
                 <Image source={require("../assets/icons/sun.png")} className="h-6 w-6"/>
                 <Text className="text-white font-semibold text-base">
-                  6:05 AM
+                  {weather?.forecast?.forecastday[0]?.astro?.sunrise}
                 </Text>
               </View>
             </View>
